@@ -4,26 +4,18 @@ mod jit;
 
 use jit::BfVM;
 use std::{
+    env,
     io::{stdin, stdout},
-    path::PathBuf,
+    path::Path,
 };
-use structopt::StructOpt;
-
-#[derive(Debug, StructOpt)]
-struct Opt {
-    #[structopt(name = "FILE")]
-    file_path: PathBuf,
-}
 
 // target/release/bf-jit hello-world.bf
 fn main() {
-    let opt = Opt::from_args();
-
     let stdin = stdin();
     let stdout = stdout();
 
     let ret = BfVM::new(
-        &opt.file_path,
+        Path::new(&env::args().nth(1).unwrap()),
         Box::new(stdin.lock()),
         Box::new(stdout.lock()),
     )
